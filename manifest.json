@@ -4,28 +4,46 @@
   "description": "Reduce annoying 404 pages by automatically checking for an archived copy in the Wayback Machine.",
   "version": "1.4",
   "homepage_url": "https://archive.org/",
-
+  "options_ui":{
+    "page":"options.html"
+  },
+  
   "permissions": [
     "tabs",
     "activeTab",
     "webRequest",
     "webRequestBlocking",
+    "storage",
     "http://*/*",
     "https://*/*",
     "*://*/*",
     "<all_urls>"
   ],
   "background": {
+    "persistent":true,
     "scripts": ["scripts/background.js"]
   },
   "web_accessible_resources": [
     "images/insetIcon.svg",
     "images/close.svg",
     "images/logo.gif",
-    "scripts/client.js"
+    "scripts/client.js",
+    "scripts/TScontent.js",
+    
+    "scripts/jquery.js",
+    "scripts/bootstrap.js",
+    "css/bootstrap.css",
+    
+    "fonts/glyphicons-halflings-regular.eot",
+    "fonts/glyphicons-halflings-regular.svg",
+    "fonts/glyphicons-halflings-regular.ttf",
+    "fonts/glyphicons-halflings-regular.woff",
+    "fonts/glyphicons-halflings-regular.woff2"
   ],
+  
+  
   "browser_action": {
-   "default_icon": "images/icon.png",
-   "default_popup": "index.html"
+    "default_icon": "images/icon.png",
+    "default_popup": "index.html"
   }
 }
