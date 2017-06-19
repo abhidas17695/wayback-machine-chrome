@@ -396,10 +396,23 @@ chrome.webRequest.onCompleted.addListener(function(details) {
         return ((typeof url) === "string" &&
         (url.indexOf("http://") === 0 || url.indexOf("https://") === 0));
       }
+
+
+      function inject_ts(id){
+          chrome.tabs.executeScript(id, {
+                  file:"scripts/jquery.js"
+                });
+                chrome.tabs.executeScript(id, {
+                  file:"scripts/bootstrap.js"
+                });
+                chrome.tabs.executeScript(id, {
+                  file:"scripts/TScontent.js"
+                });
+      }
       
       
       chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-        if(message.message=='openurl'){
+        if(message.message=='openurl' && message.url==undefined){
           chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             var tab = tabs[0];
             var page_url = tab.url;
@@ -417,26 +430,54 @@ chrome.webRequest.onCompleted.addListener(function(details) {
               chrome.tabs.create({ url:  open_url});
             }
           });
+        }else if(message.message=='openurl' && message.url!=undefined){
+            chrome.tabs.create({ url:  message.url});
+        }else if(message.message=='makemodal'){
+            
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                var tab=tabs[0];
+                var url=tabs[0].url;
+                chrome.tabs.executeScript(tab.id, {
+                  file:"scripts/d3.js"
+                });
+                chrome.tabs.executeScript(tab.id, {
+                  file:"scripts/RTcontent.js"
+                });
+                chrome.tabs.executeScript(tab.id, {
+                  file:"scripts/sequences.js"
+                });
+                
+                
+            });
+                
+        }else if(message.message=='sendurl'){
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                var url=tabs[0].url;
+                chrome.tabs.sendMessage(tabs[0].id, {url:url});
+            });
+        }else if(message.message=='start_ts'){
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                var tab=tabs[0];
+          if (tab.url.startsWith("http://web.archive.org/web") || tab.url.startsWith("https://web.archive.org/web") || tab.url.startsWith("https://web-beta.archive.org/web") ) {
+            chrome.storage.sync.get(['ts'], function(items) {
+              if(items.ts){
+                inject_ts(tab.id);
+              }
+            });
+          }
+        });
         }
       });
       chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){    
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-          if (changeInfo.status == "complete" && tab.url.startsWith("http://web.archive.org/web")) {
+          if (changeInfo.status == "complete" && (tab.url.startsWith("http://web.archive.org/web") || tab.url.startsWith("https://web.archive.org/web") || tab.url.startsWith("https://web-beta.archive.org/web") )) {
             chrome.storage.sync.get(['ts'], function(items) {
               if(items.ts){
-                chrome.tabs.executeScript(tab.id, {
-                  file:"scripts/jquery.js"
-                });
-                chrome.tabs.executeScript(tab.id, {
-                  file:"scripts/bootstrap.js"
-                });
-                chrome.tabs.executeScript(tab.id, {
-                  file:"scripts/TScontent.js"
-                });
+                inject_ts(tab.id);
               }
             });
           }
         });
       });
       
-      
+ 

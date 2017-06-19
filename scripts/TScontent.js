@@ -21,9 +21,12 @@ function dispTooltipText(eventObj){
     return;
   }else{
     var pos=source.indexOf('web.archive.org');
-    var URLofElem=source.substr(pos+38);
+    var URLofElem=source.substring(pos+38);
     var xhr=new XMLHttpRequest();
-    xhr.open("GET","http://archive.org/wayback/available?url="+URLofElem[0]+"&timestamp="+ts[0],true);
+    var wb_url="http://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0];
+    console.log(wb_url);
+    console.log(pos);
+    xhr.open("GET",wb_url,true);
     xhr.onload=function(){
       var text;
       var res=JSON.parse(xhr.responseText);
@@ -73,7 +76,7 @@ function dispTooltipText(eventObj){
           month="December";
           break;
         }
-        text=month+","+day+" "+year+" "+" "+hour+":"+min+":"+sec;
+        text=month+" "+day+" "+year+" "+" "+hour+":"+min+":"+sec;
         target.setAttribute('data-original-title',text);
         target.setAttribute('count','1');
         $("[data-toggle='tooltip']").tooltip('hide');

@@ -4,9 +4,7 @@
   "description": "Reduce annoying 404 pages by automatically checking for an archived copy in the Wayback Machine.",
   "version": "1.4",
   "homepage_url": "https://archive.org/",
-  "options_ui":{
-    "page":"options.html"
-  },
+  
   
   "permissions": [
     "tabs",
@@ -33,7 +31,12 @@
     "scripts/jquery.js",
     "scripts/bootstrap.js",
     "css/bootstrap.css",
-    
+    "scripts/RTcontent.js",
+    "scripts/sequences.js",
+    "scripts/d3.js",
+    "css/RTstyle.css",
+    "css/googlestyle.css",
+    "css/sequences.css",
     "fonts/glyphicons-halflings-regular.eot",
     "fonts/glyphicons-halflings-regular.svg",
     "fonts/glyphicons-halflings-regular.ttf",
