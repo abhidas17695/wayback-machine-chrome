@@ -1,7 +1,7 @@
 .RTmodal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1000 !important; /* Sit on top */
+    z-index: 100000000 !important; /* Sit on top */
 
     
 

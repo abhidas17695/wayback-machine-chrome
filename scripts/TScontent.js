@@ -1,3 +1,4 @@
+URL="";
 function dispTooltipText(eventObj){
   var target=eventObj.target;
   console.log(target);
@@ -20,10 +21,28 @@ function dispTooltipText(eventObj){
     target.setAttribute('data-original-title',text);
     return;
   }else{
-    var pos=source.indexOf('web.archive.org');
-    var URLofElem=source.substring(pos+38);
+    var pos;
+    var URLofElem;
     var xhr=new XMLHttpRequest();
-    var wb_url="http://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0];
+    var wb_url;
+    if(URL.includes('https')){
+        
+        if(URL.includes('web-beta.archive.org')){
+            pos=source.indexOf('web-beta.archive.org');
+            URLofElem=source.substring(pos+43);
+            wb_url="https://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0];
+        }else{
+            pos=source.indexOf('web.archive.org');
+            URLofElem=source.substring(pos+38);
+            wb_url="https://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0];
+        }
+    }else{
+        
+        pos=source.indexOf('web.archive.org');
+        URLofElem=source.substring(pos+38);
+        wb_url="http://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0];
+    }
+    
     console.log(wb_url);
     console.log(pos);
     xhr.open("GET",wb_url,true);
@@ -116,6 +135,12 @@ $(document).ready(function(){
     }
   }
   $("body").tooltip({ selector: "[data-toggle='tooltip']",container:'body'});
+    chrome.runtime.sendMessage({message:'sendurl'});
+    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+        if(message.url){
+            URL=message.url;
+        }
+    });
 });
 
 

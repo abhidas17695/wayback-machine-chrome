@@ -409,8 +409,23 @@ chrome.webRequest.onCompleted.addListener(function(details) {
                   file:"scripts/TScontent.js"
                 });
       }
+
+
+
+function restoreSettings() {
+          chrome.storage.sync.set({
+            ts:true,
+            rt:true
+          });
+}
+
+
+
       
-      
+restoreSettings();
+      chrome.storage.sync.get(['ts','rt'], function(items) {
+              console.log(items.ts,items.rt);
+            });
       chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         if(message.message=='openurl' && message.url==undefined){
           chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -437,7 +452,11 @@ chrome.webRequest.onCompleted.addListener(function(details) {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 var tab=tabs[0];
                 var url=tabs[0].url;
-                chrome.tabs.executeScript(tab.id, {
+                if(url.includes('web.archive.org') || url.includes('web-beta.archive.org')){
+                    //chrome.tabs.sendMessage(tab.id, {message:'nomodal'});
+                    alert("Structure as radial tree not available on archive.org pages");
+                }else{
+                    chrome.tabs.executeScript(tab.id, {
                   file:"scripts/d3.js"
                 });
                 chrome.tabs.executeScript(tab.id, {
@@ -446,6 +465,8 @@ chrome.webRequest.onCompleted.addListener(function(details) {
                 chrome.tabs.executeScript(tab.id, {
                   file:"scripts/sequences.js"
                 });
+                }
+                
                 
                 
             });
@@ -468,14 +489,18 @@ chrome.webRequest.onCompleted.addListener(function(details) {
         });
         }
       });
-      chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){    
+      chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){  
+          
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+          
           if (changeInfo.status == "complete" && (tab.url.startsWith("http://web.archive.org/web") || tab.url.startsWith("https://web.archive.org/web") || tab.url.startsWith("https://web-beta.archive.org/web") )) {
-            chrome.storage.sync.get(['ts'], function(items) {
+              chrome.storage.sync.get(['ts'], function(items) {
+                  console.log(items.ts);
               if(items.ts){
                 inject_ts(tab.id);
               }
             });
+            
           }
         });
       });

@@ -45,7 +45,7 @@ function restoreSettings() {
   
   chrome.storage.sync.get({
     
-    ts: true,
+    ts:true,
     rt:true
   }, function(items) {
     
@@ -75,12 +75,10 @@ function saveSettings(){
   });
 }
 
-
-
-
+restoreSettings();
 document.getElementById('settings_div').style.display="none";
 
-document.addEventListener('DOMContentLoaded', restoreSettings);
+
 document.getElementById('save_now').onclick = save_now_function;
 document.getElementById('recent_capture').onclick = recent_capture_function;
 document.getElementById('first_capture').onclick = first_capture_function;
