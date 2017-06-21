@@ -1,5 +1,5 @@
 IAglobvar=0;
-console.log('sequences');
+//console.log('sequences');
 chrome.runtime.sendMessage({message:'sendurl'});
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
   if(message.url){
@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
     
     var pos=url.indexOf('/');
     url=url.substring(0,pos);
-    console.log(url);
+    //console.log(url);
     var xhr = new XMLHttpRequest();
     xhr.open("GET","https://web.archive.org/cdx/search/cdx?url="+url+"/&fl=timestamp,original&matchType=prefix&filter=statuscode:200&filter=mimetype:text/html&output=json", true);     
     
@@ -123,7 +123,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         
       }
       
-      console.log(year_arr);   
+      //console.log(year_arr);   
       for(var i=0;i<year_arr.length;i++){
         var url=year_arr[i][0];
         for(var j=1;j<year_arr[i].length;j++){
@@ -158,16 +158,17 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         }
       }
       var all_years=[];
-      for(var i=0;i<years.length-1;i++){
+      for(var i=0;i<years.length;i++){
         if(years[i].length>1){
           all_years.push(years[i][0]);
         }
       }
-      
+      //console.log(years);
+      //console.log(all_years);
       
       function make_new_text(n){
         var text="";
-        console.log(years[n]);
+        //console.log(years[n]);
         var x=2;
         if(years[n].length==2){
           x=1;
@@ -209,9 +210,9 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         target.classList.add('activebtn');
         IAglobvar=target.id;
         var num=all_years.indexOf(target.id) ;
-        console.log(num);
+        //console.log(num);
         var text=make_new_text(num);
-        console.log(text);
+        //console.log(text);
         make_chart(text);
       }
       var btns=document.getElementsByClassName('yearbtn');
@@ -277,6 +278,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
         
         var csv = d3.csvParseRows(text);
         var json = buildHierarchy(csv);
+        console.log(json);
         createVisualization(json);
         
         
@@ -339,7 +341,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
             
           }
           var wayback_url="https://web-beta.archive.org/web/"+year+"*"+url;
-          console.log(url);
+          //console.log(url);
           
           chrome.runtime.sendMessage({message:'openurl',url:wayback_url});
         }
@@ -417,7 +419,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
       // Update the breadcrumb trail to show the current sequence and percentage.
       function updateBreadcrumbs(nodeArray, percentageString) {
         var anc_arr=nodeArray;
-        console.log(anc_arr);
+        //console.log(anc_arr);
         // Data join; key function combines name and depth (= position in sequence).
         var trail = document.getElementById("sequence");
         
@@ -434,7 +436,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
           }
           
         }
-        trail.innerHTML=text+' '+percentageString;
+        trail.innerHTML=text;
         
         // Make the breadcrumb trail visible, if it's hidden.
     
@@ -501,7 +503,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
             var children = currentNode["children"];
             var nodeName = parts[j];
             var childNode;
-            if (j + 1 < parts.length) {
+            if (j + 1< parts.length) {
               // Not yet at the end of the sequence; move down the tree.
               var foundChild = false;
               for (var k = 0; k < children.length; k++) {
