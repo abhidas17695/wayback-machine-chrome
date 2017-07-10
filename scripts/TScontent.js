@@ -21,9 +21,9 @@ function dispTooltipText(eventObj){
     return;
   }else{
     var pos=source.indexOf('web.archive.org');
-    var URLofElem=source.substr(pos+38);
+    var URLofElem=source.substring(pos+38);
     var xhr=new XMLHttpRequest();
-    xhr.open("GET","http://archive.org/wayback/available?url="+URLofElem[0]+"&timestamp="+ts[0],true);
+    xhr.open("GET","http://archive.org/wayback/available?url="+URLofElem+"&timestamp="+ts[0],true);
     xhr.onload=function(){
       var text;
       var res=JSON.parse(xhr.responseText);
