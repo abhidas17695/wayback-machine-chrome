@@ -83,6 +83,7 @@ document.getElementById('save_now').onclick = save_now_function;
 document.getElementById('recent_capture').onclick = recent_capture_function;
 document.getElementById('first_capture').onclick = first_capture_function;
 document.getElementById('make_modal').onclick=makeModal;
+
 document.getElementById('settings_btn').onclick=showSettings;
 document.getElementById('settings_save_btn').onclick=saveSettings;
 
