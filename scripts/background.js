@@ -240,7 +240,7 @@ function checkIt(wayback_url) {
 * License: AGPL-3
 * Copyright 2016, Internet Archive
 */
-var VERSION = "2.12";
+var VERSION = "2.13";
 Globalstatuscode="";
 var excluded_urls = [
   "localhost",
@@ -268,6 +268,10 @@ function rewriteUserAgentHeader(e) {
   }
   return {requestHeaders: e.requestHeaders};
 }
+
+
+
+
 
 myNotID=null;
 
@@ -405,6 +409,17 @@ function URLopener(open_url,url,wmAvailabilitycheck){
         chrome.tabs.create({ url:  open_url});
     }
 }
+
+chrome.history.search({text: '', maxResults: 1}, function(data) {
+    data.forEach(function(page) {
+        var pattern = /https:\/\/web\.archive\.org\/web\/(.+?)\//g;
+        var wmAvailabilitycheck=true;
+        var wayback_url ="https://web.archive.org/web/2/";
+        var url = page.url.replace(pattern, "");
+        var open_url = wayback_url+encodeURI(url);
+        URLopener(open_url,url,wmAvailabilitycheck);
+    });
+});
 
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
